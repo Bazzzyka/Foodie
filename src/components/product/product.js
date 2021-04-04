@@ -1,14 +1,15 @@
 import React from 'react';
-import counter from '../../hocs/counter';
 import PropTypes from 'prop-types';
+import { increment, decrement } from '../../redux/actions';
+import { connect } from 'react-redux';
 
 import style from './product.module.css';
 
 import { ReactComponent as Minus } from '../../icons/minus.svg';
 import { ReactComponent as Plus } from '../../icons/plus.svg';
 
-const Product = ({ product, decrement, increment, amount }) =>  (
-  <div className={style.card} data-id="product">
+const Product = ({ product, decrement, increment, amount }) => {
+  return <div className={style.card} data-id="product">
     <p>{product.name}</p>
     <p className={style.description}>{product.ingredients?.join(', ')}</p>
     <p>{product.price} $</p>
@@ -20,7 +21,7 @@ const Product = ({ product, decrement, increment, amount }) =>  (
       <Plus className={style.icon} />
     </button>
   </div>
-);
+};
 
 Product.propTypes = {
   product: PropTypes.shape({
@@ -33,5 +34,19 @@ Product.propTypes = {
   decrement: PropTypes.func
 };
 
-export default counter(Product);
+const mapStateToProps = (state, props) => ({
+  amount: state.order[props.product.id] || 0
+});
+
+// const mapDispatchToProps = ({
+//   increment,
+//   decrement
+// });
+
+const mapDispatchToProps = (dispatch, props) => ({
+  increment: () => dispatch(increment(props.product.id)),
+  decrement: () => dispatch(decrement(props.product.id))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Product);
 
