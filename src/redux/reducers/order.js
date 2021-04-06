@@ -1,4 +1,4 @@
-import { INCREMENT, DECREMENT } from '../constants';
+import { INCREMENT, DECREMENT, DELETE_POSITION } from '../constants';
 
 export default (state = {}, action) => {
   const { type, id } = action;
@@ -9,6 +9,8 @@ export default (state = {}, action) => {
       return { ...state, [id]: (state[id] || 0) + 1 };
     case DECREMENT:
       return { ...state, [id]: (state[id] || 0) - 1 };
+    case DELETE_POSITION:
+      return { ...state, [id]: 0 }
     default:
       return state;
   }
